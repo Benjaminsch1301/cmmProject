@@ -1,6 +1,3 @@
-
-api_url_paranal = "http://archive.eso.org/wdb/wdb/asm/meteo_paranal/query"
-
 payload_paranal = {
             "wdbo": "csv/download",
             "max_rows_returned": "99999999999999999999999999999",
@@ -255,7 +252,24 @@ payload_paranal = {
             "order": "start_date"
         }
         
-payload_lasierra = {}
+payload_lasilla = {
+            "wdbo": "csv/download",
+            "max_rows_returned": "99999999999999999999999999999",
+            "start_date": "",
+            "integration": "",
+            'tab_press': 'on',
+            'tab_presqnh': 'on',
+            'tab_temp1': 'on',
+            'tab_temp2': 'on',
+            'tab_temp3': 'on',
+            'tab_tempdew2': 'on',
+            'tab_rhum2': 'on',
+            'tab_wind_dir1': 'on',
+            'tab_wind_dir2': 'on',
+            'tab_wind_speed1': 'on',
+            'tab_wind_speed2': 'on',
+            "order": "start_date"
+        }   
 
 numeric_cols_paranal = [
     'Air Pressure at ground [hPa]',
