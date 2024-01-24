@@ -4,8 +4,8 @@ from io import StringIO
 from pymongo import MongoClient
 from datetime import datetime
 
-from variable_utils import  payload_paranal   
-from variable_utils import payload_lasilla 
+from utils.payloads import  payload_paranal   
+from utils.payloads import payload_lasilla 
 
 
 
