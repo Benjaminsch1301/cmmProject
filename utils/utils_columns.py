@@ -50,7 +50,6 @@ numeric_cols_paranal = [
     'Particle (Small) instantanous at 10m [1/m^3]',
  ]
 
-
 numeric_cols_using = [
  'Air Pressure at ground [hPa]',
  'Air Pressure Normalised [hPa]',
@@ -95,46 +94,15 @@ numeric_cols_using = [
  'Wind Speed W instantanous at 20m [m/s]'
 ]
 
-features_30m =[
- 'Air Temperature at 30m [C]',
- 'Dew Temperature at 30m [C]',
- 'Relative Humidity at 30m [%]',
- 'Wind Direction at 30m (0/360) [deg]',
- 'Wind Direction at 30m (180/-180) [deg]',
- 'Wind Speed at 30m [m/s]',
- 'Air Temperature instantanous at 30m [C]',
- 'Dew Temperature istantaneous at 30m [C]',
- 'Humidity instantanous at 30m [%]',
- 'Wind Direction instantanous at 30m [deg]',
- 'Wind Speed instantanous at 30m [m/s]',
-]
-
-features_ground = [
- 'Air Temperature at ground [C]',
- 'Air Temperature instantanous at ground [C]',
-]
-
-features_2m = [
- 'Air Temperature at 2m [C]',
- 'Dew Temperature at 2m [C]',
- 'Relative Humidity at 2m [%]',
- 'Air Temperature instantanous at 2m [C]',
- 'Dew Temperature instantanous at 2m [C]',
- 'Humidity instantanous at 2m [%]',
-]
-
-features_vlt = [
- 'Air Temperature below VLT [C]',
- 'Dew Temperature below VLT [C]',
- 'Rain intensity below VLT [%]',
- 'Relative Humidity below VLT [%]',
- 'Air Temperature instantaneous below VLT [C]',
- 'Dew Temperature instantanous below VLT [C]',
- 'Humidity instantanous below VLT [%]',
-]
-
-air_temp = [
- 'Air Temperature instantanous at 30m [C]',
- 'Air Temperature instantanous at ground [C]',
- 'Air Temperature instantaneous below VLT [C]',
+should_use_sqrt = [
+    'Wind Speed at 30m [m/s]', # sqrt
+    'Wind Speed at 10m [m/s]', # sqrt
+    'Wind Speed instantanous at 30m [m/s]', # sqrt
+    'Wind Speed instantanous at 10m [m/s]', # sqrt
+    'Humidity instantanous at 30m [%]', # sqrt
+    'Humidity instantanous at 2m [%]', #sqrt
+    'Humidity instantanous below VLT [%]', # sqrt
+    'Relative Humidity at 30m [%]',
+    'Relative Humidity at 2m [%]',
+    'Relative Humidity below VLT [%]'
 ]
