@@ -1,0 +1,20 @@
+mean:
+  Ambient Temperature at 2m [C]: 13.037953240446408
+  Ambient Temperature at 30m [C]: 11.830671680333948
+  Ambient Temperature at ground [C]: 15.876726977959851
+  Dew Temperature at 2m [C]: -1.8873876204658595
+  Relative Humidity at 2m [%]: 33.558826562418275
+  Wind Direction at 10m [deg]: 114.0323779410644
+  Wind Direction at 30m [deg]: 113.85617551257589
+  Wind Speed at 10m [m/s]: 6.20988495808163
+  Wind Speed at 30m [m/s]: 6.56734499839485
+std:
+  Ambient Temperature at 2m [C]: 5.089810362885987
+  Ambient Temperature at 30m [C]: 4.2115455241291695
+  Ambient Temperature at ground [C]: 7.135870408785183
+  Dew Temperature at 2m [C]: 5.492698016876413
+  Relative Humidity at 2m [%]: 20.134183858562118
+  Wind Direction at 10m [deg]: 114.9268596642823
+  Wind Direction at 30m [deg]: 114.92183370274357
+  Wind Speed at 10m [m/s]: 4.275386370633431
+  Wind Speed at 30m [m/s]: 4.479774525099039

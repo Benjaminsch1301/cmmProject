@@ -1,0 +1,78 @@
+mean:
+  Air Temperature at 2m [C]: 13.033713869988432
+  Air Temperature at 30m [C]: 12.773546502167871
+  Air Temperature at ground [C]: 17.040515966342024
+  Air Temperature below VLT [C]: 14.146217043914888
+  Air Temperature instantaneous below VLT [C]: 14.146083290271504
+  Air Temperature instantanous at 2m [C]: 13.154050785343
+  Air Temperature instantanous at 30m [C]: 12.867531799796858
+  Air Temperature instantanous at ground [C]: 17.08217975160943
+  Dew Temperature at 2m [C]: -14.415575929122715
+  Dew Temperature at 30m [C]: -15.101258222038085
+  Dew Temperature below VLT [C]: -14.200985868586004
+  Dew Temperature instantanous at 2m [C]: -14.348918830008557
+  Dew Temperature instantanous below VLT [C]: -14.214200502663308
+  Dew Temperature istantaneous at 30m [C]: -15.139170006008834
+  Humidity instantanous at 2m [%]: 17.23872123594691
+  Humidity instantanous at 30m [%]: 16.63908495228788
+  Humidity instantanous below VLT [%]: 16.36107325201035
+  Rain intensity below VLT [%]: 1.6454331800511994
+  Rain intensity instantanous [%]: 1.6454331800511994
+  Relative Humidity at 2m [%]: 17.26125483935683
+  Relative Humidity at 30m [%]: 16.797873462774074
+  Relative Humidity below VLT [%]: 16.387944415914237
+  Wind Direction at 10m (0/360) [deg]: 183.0392237859239
+  Wind Direction at 10m (180/-180) [deg]: -2.312402628296821
+  Wind Direction at 30m (0/360) [deg]: 178.48691442649994
+  Wind Direction at 30m (180/-180) [deg]: 3.242201294033405
+  Wind Direction instantanous at 10m [deg]: 178.5549720983548
+  Wind Direction instantanous at 30m [deg]: 186.38925936490378
+  Wind Speed U at 20m [m/s]: -2.8597182798510725
+  Wind Speed U instantanous at 20m [m/s]: -2.8730912663751855
+  Wind Speed V at 20m [m/s]: 2.1030947902990667
+  Wind Speed V instantanous at 20m [m/s]: 2.100330496742825
+  Wind Speed W at 20m [m/s]: 1.082942641530258
+  Wind Speed W instantanous at 20m [m/s]: 1.1193045313526997
+  Wind Speed at 10m [m/s]: 6.472696464393202
+  Wind Speed at 30m [m/s]: 6.893226160883867
+  Wind Speed instantanous at 10m [m/s]: 6.430529823259846
+  Wind Speed instantanous at 30m [m/s]: 6.961601560085012
+std:
+  Air Temperature at 2m [C]: 3.2654244689962004
+  Air Temperature at 30m [C]: 2.981604057948559
+  Air Temperature at ground [C]: 2.735055076488572
+  Air Temperature below VLT [C]: 3.5640807223809605
+  Air Temperature instantaneous below VLT [C]: 3.5690842238638547
+  Air Temperature instantanous at 2m [C]: 3.2884055349999977
+  Air Temperature instantanous at 30m [C]: 3.004571347007407
+  Air Temperature instantanous at ground [C]: 2.629150564082421
+  Dew Temperature at 2m [C]: 8.984958514543763
+  Dew Temperature at 30m [C]: 9.153671258846728
+  Dew Temperature below VLT [C]: 9.258654316990384
+  Dew Temperature instantanous at 2m [C]: 9.054603614532052
+  Dew Temperature instantanous below VLT [C]: 9.263466220662803
+  Dew Temperature istantaneous at 30m [C]: 9.19714083470395
+  Humidity instantanous at 2m [%]: 14.541712966253453
+  Humidity instantanous at 30m [%]: 14.26119046661281
+  Humidity instantanous below VLT [%]: 13.807676229306354
+  Rain intensity below VLT [%]: 5.6650411341744755
+  Rain intensity instantanous [%]: 5.6650411341744755
+  Relative Humidity at 2m [%]: 14.61931507768309
+  Relative Humidity at 30m [%]: 14.463151798083413
+  Relative Humidity below VLT [%]: 13.823427691526662
+  Wind Direction at 10m (0/360) [deg]: 131.33908850244694
+  Wind Direction at 10m (180/-180) [deg]: 76.71488811208027
+  Wind Direction at 30m (0/360) [deg]: 132.3595909604936
+  Wind Direction at 30m (180/-180) [deg]: 77.53972892331672
+  Wind Direction instantanous at 10m [deg]: 131.70054835814219
+  Wind Direction instantanous at 30m [deg]: 132.76721332594852
+  Wind Speed U at 20m [m/s]: 5.442054266327934
+  Wind Speed U instantanous at 20m [m/s]: 5.514782371199266
+  Wind Speed V at 20m [m/s]: 4.686695553536548
+  Wind Speed V instantanous at 20m [m/s]: 4.709345762848448
+  Wind Speed W at 20m [m/s]: 1.7204627090640459
+  Wind Speed W instantanous at 20m [m/s]: 1.8263490798668107
+  Wind Speed at 10m [m/s]: 4.0349536099215095
+  Wind Speed at 30m [m/s]: 4.153408626573824
+  Wind Speed instantanous at 10m [m/s]: 4.1086425708206615
+  Wind Speed instantanous at 30m [m/s]: 4.2539657348153055
