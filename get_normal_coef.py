@@ -55,7 +55,7 @@ with open("normal_coef_paranal.yaml","w") as file:
 
 print('Normal coeficients for paranal saved!')
 
-with open("normal_coef_lasila.yaml","w") as file:
+with open("normal_coef_lasilla.yaml","w") as file:
     yaml.dump(dictionary_coef_lasilla,file)
 
 print('Normal coeficients for la silla saved!')

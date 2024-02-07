@@ -9,15 +9,9 @@ sys.path.append('/Users/ben_rss/Documents/CMM_2024/cmmProject/')
 
 from utils.utils_columns import numeric_cols_using
 with open('normal_coef_paranal.yaml','r') as f:
-    norm_coef = yaml.safe_load(f)
-
-
-## connecting
-db_name = "meteo_paranal_test" 
-
-client = MongoClient("mongodb://localhost:27017/")
-db = client[db_name] # meteo_paranal_test
-collection = db[db_name]
+    normal_coef_paranal = yaml.safe_load(f)
+with open('normal_coef_lasilla.yaml','r') as f:
+    normal_coef_lasilla = yaml.safe_load(f)
 
 class ObsDataset(Dataset):
     def __init__(self, norm_coef, collection):
@@ -54,13 +48,41 @@ class ObsDataset(Dataset):
     
 
 
-test_paranal_dataset = ObsDataset( norm_coef = norm_coef,collection = collection)
+## Paranal
+db_name_paranal = "meteo_paranal_test" 
+
+client = MongoClient("mongodb://localhost:27017/")
+db_paranal = client[db_name_paranal] # meteo_paranal_test
+collection_paranal = db_paranal[db_name_paranal]
+
+## La Silla
+db_name_lasilla = "meteo_lasilla" 
+
+db_lasilla = client[db_name_lasilla] # meteo_paranal_test
+collection_lasilla = db_lasilla[db_name_lasilla]
 
 
-dataloader = DataLoader(test_paranal_dataset, batch_size=32, shuffle=True, num_workers=0)
+test_paranal_dataset = ObsDataset( norm_coef = normal_coef_paranal,collection = collection_paranal)
+test_lasilla_dataset = ObsDataset( norm_coef = normal_coef_lasilla,collection = collection_lasilla)
+
+
+dataloader_paranal = DataLoader(test_paranal_dataset, batch_size=32, shuffle=True, num_workers=0)
+dataloader_lasilla = DataLoader(test_lasilla_dataset, batch_size=32, shuffle=True, num_workers=0)
+
+print('Paranal')
+i = 0
+for batch,date_time in dataloader_paranal:
+    print(batch,date_time)
+    i+=1
+    if i == 3: break
+
+
+print('*'*50)
+print('\nLaSilla')
 
 i = 0
-for batch,date_time in dataloader:
+
+for batch,date_time in dataloader_lasilla:
     print(batch,date_time)
     i+=1
     if i == 3: break

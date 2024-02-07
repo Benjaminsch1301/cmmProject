@@ -1,16 +1,15 @@
+import argparse
 import requests
 import pandas as pd
 from io import StringIO
 from pymongo import MongoClient
 from datetime import datetime
 
-from utils.payloads import  payload_paranal   
-from utils.payloads import payload_lasilla 
-
+from utils.payloads import payload_paranal
+from utils.payloads import payload_lasilla
 
 
 def request_and_load_to_mongodb(api_url, payload, db_name):
-    
     # request to endpoint
     try:
         response = requests.get(api_url, params=payload)
@@ -25,13 +24,13 @@ def request_and_load_to_mongodb(api_url, payload, db_name):
         first_line = content_lines[0]
     else:
         print("No data received from the api :(")
+        return
 
-    # set as a object file 
+    # set as a object file
     csv_data = StringIO(first_line.decode('utf-8'))
     df = pd.read_csv(csv_data)
-    print("Dataframe shape: ",df.shape)
-    print("Data in DF" )
-    # print('memory usage: ',df.memory_usage(deep=True).sum())
+    print("Dataframe shape: ", df.shape)
+    print("Data in DF")
     # Connection to local mongodb
     try:
         client = MongoClient("mongodb://localhost:27017/")
@@ -46,8 +45,7 @@ def request_and_load_to_mongodb(api_url, payload, db_name):
         client.close()
 
 
-def get_year_range(start_year ,end_year ):
-    "function which gets year range as a list"
+def get_year_range(start_year, end_year):
     year_list = []
     for year in range(start_year, end_year + 1):
         start_date = datetime(year, 1, 1)
@@ -57,27 +55,35 @@ def get_year_range(start_year ,end_year ):
     return year_list
 
 
-year_range_paranal = {'start_year' : 1998,'end_year' :2024}
-year_range_lasierra = {'start_year' : 1991,'end_year' : 2024} # 1991
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Download data from La Silla or Paranal.')
+    parser.add_argument('site', choices=['paranal', 'lasilla'], help='Choose the site (paranal or lasilla)')
+    parser.add_argument('--start_year', type=int, default=1991, help='Start year for data retrieval')
+    parser.add_argument('--end_year', type=int, default=2024, help='End year for data retrieval')
+    args = parser.parse_args()
 
-year_range = get_year_range(**year_range_lasierra)
-print('Init range: ',year_range[0])
-print('Final range',year_range[-1])
+    if args.site == 'paranal':
+        db_name = "meteo_paranal"
+        api_url = "http://archive.eso.org/wdb/wdb/asm/meteo_paranal/query"
+        payload = payload_paranal
+    elif args.site == 'lasilla':
+        db_name = "meteo_lasilla"
+        api_url = "http://archive.eso.org/wdb/wdb/asm/meteo_lasilla/query"
+        payload = payload_lasilla
 
-# db_name = "meteo_paranal" # meteo_paranal_test, meteo_paranal
-# api_url = "http://archive.eso.org/wdb/wdb/asm/meteo_paranal/query"
-# payload = payload_paranal 
+    year_range = get_year_range(args.start_year, args.end_year)
+    print('Init range: ', year_range[0])
+    print('Final range', year_range[-1])
 
-db_name = "meteo_lasilla"
-api_url =  "http://archive.eso.org/wdb/wdb/asm/meteo_lasilla/query"
-payload =payload_lasilla
+    # iterating according to the periods
+    for period in year_range:
+        payload['start_date'] = period
+        print("=" * 40)
+        print(f"{period}\n")
+        request_and_load_to_mongodb(api_url=api_url, payload=payload, db_name=db_name)
+    print("*" * 50, '\n')
+    print("Done!")
 
+# python3.11 download.py lasilla --start_year 1991 --end_year 2024
+# python3.11 download.py paranal --start_year 1998 --end_year 2024
 
-# iterating according to the periods
-for period in year_range:
-    payload['start_date'] = period
-    print("="*40)
-    print(f"{period}\n")
-    request_and_load_to_mongodb(api_url = api_url , payload = payload, db_name = db_name)
-print("*"*50,'\n')
-print("Done!")
