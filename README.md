@@ -8,9 +8,11 @@ Pipeline Data Develop for GNN
 2. See folders "laSilla" and "paranal" where you can find notebooks with data analysis (missing data, count data, distributions, time series plot, etc.)
 
 3. In order to get normal coeficients (mean and standard deviation), run:
+
         python get_normal_coef.py 
+
     And it will generate the next files with that information:
         normal_coef_lasilla.yaml
         normal_coef_paranal.yaml
 
-4. Datareader for La Silla and Paranal is in datareader.py  
+4. Datareader for La Silla and Paransal is in datareader.py  
