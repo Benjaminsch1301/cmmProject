@@ -257,8 +257,8 @@ payload_lasilla = {
             "max_rows_returned": "99999999999999999999999999999",
             "start_date": "",
             "integration": "",
-            'tab_press': 'on',
-            'tab_presqnh': 'on',
+            'tab_press': '',
+            'tab_presqnh': '',
             'tab_temp1': 'on',
             'tab_temp2': 'on',
             'tab_temp3': 'on',
@@ -270,3 +270,23 @@ payload_lasilla = {
             'tab_wind_speed2': 'on',
             "order": "start_date"
         }   
+
+
+payload_apex = {
+            "wdbo": "csv/download",
+            "max_rows_returned": "99999999999999999999999999999",
+            "start_date": "",
+            "integration": "",
+            "tab_pwv": "",
+            "tab_azimuth": "",
+            "tab_elevation": "",
+            "tab_controlboxtemperature": "",
+            "tab_shutter": "",
+            "tab_pressure": "",
+            "tab_dewpoint": "on",
+            "tab_humidity": "on",
+            "tab_temperature": "on",
+            "tab_winddirection": "on",
+            "tab_windspeed": "on",
+            "order": "start_date"
+}

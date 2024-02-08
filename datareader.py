@@ -12,8 +12,10 @@ with open('normal_coef_paranal.yaml','r') as f:
     normal_coef_paranal = yaml.safe_load(f)
 with open('normal_coef_lasilla.yaml','r') as f:
     normal_coef_lasilla = yaml.safe_load(f)
+with open('normal_coef_apex.yaml','r') as f:
+    normal_coef_apex = yaml.safe_load(f)
 
-class ObsDataset(Dataset):
+class ObsMeteoDataset(Dataset):
     def __init__(self, norm_coef, collection):
 
         self.collection = collection
@@ -48,33 +50,38 @@ class ObsDataset(Dataset):
     
 
 
-## Paranal
-db_name_paranal = "meteo_paranal_test" 
-
 client = MongoClient("mongodb://localhost:27017/")
-db_paranal = client[db_name_paranal] # meteo_paranal_test
-collection_paranal = db_paranal[db_name_paranal]
+
+## Paranal
+db_name = "meteo_paranal" 
+db = client[db_name] 
+collection_paranal = db[db_name]
+dataset_apex = ObsMeteoDataset( norm_coef = normal_coef_paranal,collection = collection_paranal)
+dataloader_paranal = DataLoader(dataset_apex, batch_size=32, shuffle=True, num_workers=0)
+
 
 ## La Silla
-db_name_lasilla = "meteo_lasilla" 
-
-db_lasilla = client[db_name_lasilla] # meteo_paranal_test
-collection_lasilla = db_lasilla[db_name_lasilla]
-
-
-test_paranal_dataset = ObsDataset( norm_coef = normal_coef_paranal,collection = collection_paranal)
-test_lasilla_dataset = ObsDataset( norm_coef = normal_coef_lasilla,collection = collection_lasilla)
+db_name = "meteo_lasilla" 
+db = client[db_name] 
+collection_lasilla = db[db_name]
+dataset_lasilla = ObsMeteoDataset( norm_coef = normal_coef_lasilla,collection = collection_lasilla)
+dataloader_lasilla = DataLoader(dataset_lasilla, batch_size=32, shuffle=True, num_workers=0)
 
 
-dataloader_paranal = DataLoader(test_paranal_dataset, batch_size=32, shuffle=True, num_workers=0)
-dataloader_lasilla = DataLoader(test_lasilla_dataset, batch_size=32, shuffle=True, num_workers=0)
+## APEX
+db_name = "meteo_apex" 
+db = client[db_name] 
+collection_apex = db[db_name]
+dataset_apex = ObsMeteoDataset( norm_coef = normal_coef_apex,collection = collection_apex)
+dataloader_apex = DataLoader(dataset_apex, batch_size=32, shuffle=True, num_workers=0)
+
 
 print('Paranal')
 i = 0
 for batch,date_time in dataloader_paranal:
     print(batch,date_time)
     i+=1
-    if i == 3: break
+    if i == 2: break
 
 
 print('*'*50)
@@ -85,4 +92,17 @@ i = 0
 for batch,date_time in dataloader_lasilla:
     print(batch,date_time)
     i+=1
-    if i == 3: break
+    if i == 2: break
+
+
+print('*'*50)
+print('\nAPEX')
+
+i = 0
+
+for batch,date_time in dataloader_apex:
+    print(batch,date_time)
+    i+=1
+    if i == 2: break
+
+client.close()

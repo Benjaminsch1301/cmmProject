@@ -5,8 +5,12 @@ from io import StringIO
 from pymongo import MongoClient
 from datetime import datetime
 
+import sys
+sys.path.append('/Users/ben_rss/Documents/CMM_2024/cmmProject/')
+
 from utils.payloads import payload_paranal
 from utils.payloads import payload_lasilla
+from utils.payloads import payload_apex 
 
 
 def request_and_load_to_mongodb(api_url, payload, db_name):
@@ -24,13 +28,14 @@ def request_and_load_to_mongodb(api_url, payload, db_name):
         first_line = content_lines[0]
     else:
         print("No data received from the api :(")
-        return
+
 
     # set as a object file
     csv_data = StringIO(first_line.decode('utf-8'))
     df = pd.read_csv(csv_data)
     print("Dataframe shape: ", df.shape)
     print("Data in DF")
+    
     # Connection to local mongodb
     try:
         client = MongoClient("mongodb://localhost:27017/")
@@ -56,8 +61,8 @@ def get_year_range(start_year, end_year):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Download data from La Silla or Paranal.')
-    parser.add_argument('site', choices=['paranal', 'lasilla'], help='Choose the site (paranal or lasilla)')
+    parser = argparse.ArgumentParser(description='Download data from La Silla, Paranal or APEX.')
+    parser.add_argument('site', choices=['paranal', 'lasilla','apex'], help='Choose the site (paranal, lasilla, or APEX)')
     parser.add_argument('--start_year', type=int, default=1991, help='Start year for data retrieval')
     parser.add_argument('--end_year', type=int, default=2024, help='End year for data retrieval')
     args = parser.parse_args()
@@ -70,10 +75,14 @@ if __name__ == "__main__":
         db_name = "meteo_lasilla"
         api_url = "http://archive.eso.org/wdb/wdb/asm/meteo_lasilla/query"
         payload = payload_lasilla
+    elif args.site == 'apex': 
+        db_name = 'meteo_apex'
+        api_url = 'http://archive.eso.org/wdb/wdb/asm/meteo_apex/query'
+        payload = payload_apex 
 
     year_range = get_year_range(args.start_year, args.end_year)
     print('Init range: ', year_range[0])
-    print('Final range', year_range[-1])
+    print('Final range: ', year_range[-1])
 
     # iterating according to the periods
     for period in year_range:
@@ -83,7 +92,3 @@ if __name__ == "__main__":
         request_and_load_to_mongodb(api_url=api_url, payload=payload, db_name=db_name)
     print("*" * 50, '\n')
     print("Done!")
-
-# python3.11 download.py lasilla --start_year 1991 --end_year 2024
-# python3.11 download.py paranal --start_year 1998 --end_year 2024
-
