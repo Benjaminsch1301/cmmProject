@@ -57,7 +57,7 @@ def get_normal_coef(numeric_cols,db_name):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download data from La Silla, Paranal or APEX.')
-    parser.add_argument('site', choices=['paranal', 'lasilla','apex','all'], help='Choose the site (paranal, lasilla, apex or all)')
+    parser.add_argument('site', choices=['paranal', 'lasilla','apex','all'], help='Choose the location (paranal, lasilla, apex or all)')
     args = parser.parse_args()
 
     if args.site == 'paranal':

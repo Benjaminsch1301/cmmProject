@@ -1,13 +1,9 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 from pymongo import MongoClient
-import pandas as pd
 import random
 import yaml
-import sys
-sys.path.append('/Users/ben_rss/Documents/CMM_2024/cmmProject/')
 
-from utils.utils_columns import numeric_cols_using
 with open('normal_coef_paranal.yaml','r') as f:
     normal_coef_paranal = yaml.safe_load(f)
 with open('normal_coef_lasilla.yaml','r') as f:
@@ -37,8 +33,6 @@ class ObsMeteoDataset(Dataset):
 
         data_id = self.collection.find_one({'_id': id})
 
-        # self.ids = [doc_id for doc_id in self.ids if doc_id !=id] # deleting ids to avoid duplicates in training
-        
         ## using normal coef
         id_list= []
         for feature in self.features:
@@ -86,9 +80,7 @@ for batch,date_time in dataloader_paranal:
 
 print('*'*50)
 print('\nLaSilla')
-
 i = 0
-
 for batch,date_time in dataloader_lasilla:
     print(batch,date_time)
     i+=1
@@ -97,9 +89,7 @@ for batch,date_time in dataloader_lasilla:
 
 print('*'*50)
 print('\nAPEX')
-
 i = 0
-
 for batch,date_time in dataloader_apex:
     print(batch,date_time)
     i+=1
