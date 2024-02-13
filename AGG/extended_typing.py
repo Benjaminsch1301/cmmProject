@@ -315,3 +315,6 @@ def test_data_classes():
     test2 = ContinuousTimeGraphSample(**graph)
     collate_graph_samples([test, test2])
     ContinuousTimeGraphSample(**{**graph, "category_index": [10, 10, 10]})
+
+if __name__ == '__main__':
+    test_data_classes()
