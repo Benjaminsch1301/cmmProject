@@ -1,0 +1,11 @@
+collection_pure_samples: Meteo_test
+collection_test: test
+collection_train: train
+context_len: 10
+db_name: Meteo_test
+host: mongodb://localhost:27017/
+len_test: 161
+len_train: 380
+remove: 0.3
+stride: 5
+time_norm: 259200

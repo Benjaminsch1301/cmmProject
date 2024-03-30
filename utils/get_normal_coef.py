@@ -6,10 +6,47 @@ import yaml
 
 from pymongo import MongoClient
 
-import sys
-sys.path.append('/Users/ben_rss/Documents/CMM_2024/cmmProject/')
+numeric_cols_paranal = [
+    'Air Temperature at 2m [C]',
+    'Air Temperature at 30m [C]',
+    'Air Temperature at ground [C]',
+    'Air Temperature below VLT [C]',
+    'Air Temperature instantaneous below VLT [C]',
+    'Air Temperature instantanous at 2m [C]',
+    'Air Temperature instantanous at 30m [C]',
+    'Air Temperature instantanous at ground [C]',
+    'Dew Temperature at 2m [C]',
+    'Dew Temperature at 30m [C]',
+    'Dew Temperature below VLT [C]',
+    'Dew Temperature instantanous at 2m [C]',
+    'Dew Temperature instantanous below VLT [C]',
+    'Dew Temperature istantaneous at 30m [C]',
+    'Humidity instantanous at 2m [%]',
+    'Humidity instantanous at 30m [%]',
+    'Humidity instantanous below VLT [%]',
+    'Rain intensity below VLT [%]',
+    'Rain intensity instantanous [%]',
+    'Relative Humidity at 2m [%]',
+    'Relative Humidity at 30m [%]',
+    'Relative Humidity below VLT [%]',
+    'Wind Direction at 10m (0/360) [deg]',
+    'Wind Direction at 10m (180/-180) [deg]',
+    'Wind Direction at 30m (0/360) [deg]',
+    'Wind Direction at 30m (180/-180) [deg]',
+    'Wind Direction instantanous at 10m [deg]',
+    'Wind Direction instantanous at 30m [deg]',
+    'Wind Speed U at 20m [m/s]',
+    'Wind Speed U instantanous at 20m [m/s]',
+    'Wind Speed V at 20m [m/s]',
+    'Wind Speed V instantanous at 20m [m/s]',
+    'Wind Speed W at 20m [m/s]',
+    'Wind Speed W instantanous at 20m [m/s]',
+    'Wind Speed at 10m [m/s]',
+    'Wind Speed at 30m [m/s]',
+    'Wind Speed instantanous at 10m [m/s]',
+    'Wind Speed instantanous at 30m [m/s]'
+ ]
 
-from utils.utils_columns import numeric_cols_using as numeric_cols_paranal
 
 numeric_cols_lasilla = [
     'Ambient Temperature at 30m [C]', 
@@ -32,7 +69,6 @@ numeric_cols_apex = [
  ]
 
 def get_normal_coef(numeric_cols,db_name):
-
     client = MongoClient("mongodb://localhost:27017/")
     db = client[db_name] 
     collection = db[db_name]
@@ -48,7 +84,6 @@ def get_normal_coef(numeric_cols,db_name):
         std_list.append((feature,std))
         mean_list.append((feature,mean))
 
-    
     client.close()
         
     return dict([('mean',dict(mean_list)),('std',dict(std_list))])
@@ -81,18 +116,18 @@ if __name__ == "__main__":
     elif args.site == 'all':
 
         dictionary_coef_paranal = get_normal_coef(numeric_cols_paranal,db_name = "meteo_paranal" )
-        with open("normal_coef_paranal.yaml","w") as file:
-            yaml.dump(dictionary_coef_paranal,file)
-        print('Normal coeficients for paranal saved!')
-
         dictionary_coef_lasilla = get_normal_coef(numeric_cols_lasilla,db_name = "meteo_lasilla" )
-        with open("normal_coef_lasilla.yaml","w") as file:
-            yaml.dump(dictionary_coef_lasilla,file)
-        print('Normal coeficients for la silla saved!')
-    
         dictionary_coef_apex = get_normal_coef(numeric_cols_apex,db_name = "meteo_apex" )
-        with open("normal_coef_apex.yaml","w") as file:
-            yaml.dump(dictionary_coef_apex,file)
+
+        # all_norm_coef = {'paranal':dictionary_coef_paranal, 
+        #                  'lasilla': dictionary_coef_lasilla, 
+        #                  'apex': dictionary_coef_apex}
+        all_norm_coef = {0:dictionary_coef_paranal, 
+                         1: dictionary_coef_lasilla, 
+                         2: dictionary_coef_apex}
+        
+        with open("normal_coef_all.yaml","w") as file:
+            yaml.dump(all_norm_coef,file)
         print('Normal coeficients for APEX saved!')
 
 

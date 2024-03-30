@@ -5,15 +5,9 @@ from io import StringIO
 from pymongo import MongoClient
 from datetime import datetime
 
-import sys
-sys.path.append('/Users/ben_rss/Documents/CMM_2024/cmmProject/')
+from payloads import payload_paranal, payload_lasilla, payload_apex
 
-from utils.payloads import payload_paranal
-from utils.payloads import payload_lasilla
-from utils.payloads import payload_apex 
-
-
-def request_and_load_to_mongodb(api_url, payload, db_name):
+def request_and_load_to_mongodb(api_url, payload, db_name,all_in_db = False,location = None):
     # request to endpoint
     try:
         response = requests.get(api_url, params=payload)
@@ -33,6 +27,12 @@ def request_and_load_to_mongodb(api_url, payload, db_name):
     # set as a object file
     csv_data = StringIO(first_line.decode('utf-8'))
     df = pd.read_csv(csv_data)
+    if all_in_db == True:
+        if location == 'paranal': df['location'] = 0
+        elif location == 'lasilla': df['location'] = 1
+        elif location == 'apex': df['location'] = 2
+        else: pass
+            
     print("Dataframe shape: ", df.shape)
     print("Data in DF")
     
@@ -62,7 +62,7 @@ def get_year_range(start_year, end_year):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download data from La Silla, Paranal or APEX.')
-    parser.add_argument('site', choices=['paranal', 'lasilla','apex'], help='Choose the site (paranal, lasilla, or APEX)')
+    parser.add_argument('site', choices=['paranal', 'lasilla','apex','all_in_db'], help='Choose the site (paranal, lasilla, or APEX, or all)')
     parser.add_argument('--start_year', type=int, default=1991, help='Start year for data retrieval')
     parser.add_argument('--end_year', type=int, default=2024, help='End year for data retrieval')
     args = parser.parse_args()
@@ -79,16 +79,42 @@ if __name__ == "__main__":
         db_name = 'meteo_apex'
         api_url = 'http://archive.eso.org/wdb/wdb/asm/meteo_apex/query'
         payload = payload_apex 
+    elif args.site == 'all_in_db': 
+        db_name = 'meteo_db'
+        api_url_paranal = "http://archive.eso.org/wdb/wdb/asm/meteo_paranal/query"
+        api_url_lasilla = "http://archive.eso.org/wdb/wdb/asm/meteo_lasilla/query"
+        api_url_apex = 'http://archive.eso.org/wdb/wdb/asm/meteo_apex/query'
+    else : pass
 
     year_range = get_year_range(args.start_year, args.end_year)
     print('Init range: ', year_range[0])
     print('Final range: ', year_range[-1])
 
     # iterating according to the periods
-    for period in year_range:
-        payload['start_date'] = period
-        print("=" * 40)
-        print(f"{period}\n")
-        request_and_load_to_mongodb(api_url=api_url, payload=payload, db_name=db_name)
-    print("*" * 50, '\n')
-    print("Done!")
+    if args.site != 'all_in_db':
+        for period in year_range:
+            payload['start_date'] = period
+            print("=" * 40)
+            print(f"{period}\n")
+            request_and_load_to_mongodb(api_url=api_url, payload=payload, db_name=db_name)
+        print("*" * 50, '\n')
+        print("Done!")
+    
+    else :
+        for period in year_range:
+            payload_paranal['start_date'] = period
+            payload_lasilla['start_date'] = period
+            payload_apex['start_date'] = period
+            print("=" * 40)
+            print(f"{period}\n")
+            request_and_load_to_mongodb(api_url=api_url_paranal, payload=payload_paranal, db_name=db_name,
+                                        all_in_db=True,location = 'paranal')
+            print('paranal done')
+            request_and_load_to_mongodb(api_url=api_url_lasilla, payload=payload_lasilla, db_name=db_name,
+                                        all_in_db=True,location = 'lasilla')
+            print('la silla done')
+            request_and_load_to_mongodb(api_url=api_url_apex, payload=payload_apex, db_name=db_name,
+                                        all_in_db=True,location = 'apex')
+            print('apex done')
+        print("*" * 50, '\n')
+        print("Done!")

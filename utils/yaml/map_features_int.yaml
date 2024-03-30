@@ -1,0 +1,55 @@
+apex:
+  Dew Point [C]: 8
+  Humidity [%]: 14
+  Temperature [C]: 0
+  Wind Direction [deg]: 26
+  Wind Speed [m/s]: 34
+lasilla:
+  Ambient Temperature at 2m [C]: 0
+  Ambient Temperature at 30m [C]: 1
+  Ambient Temperature at ground [C]: 2
+  Dew Temperature at 2m [C]: 8
+  Relative Humidity at 2m [%]: 14
+  Wind Direction at 10m [deg]: 26
+  Wind Direction at 30m [deg]: 27
+  Wind Speed at 10m [m/s]: 34
+  Wind Speed at 30m [m/s]: 35
+paranal:
+  Air Temperature at 2m [C]: 0
+  Air Temperature at 30m [C]: 1
+  Air Temperature at ground [C]: 2
+  Air Temperature below VLT [C]: 3
+  Air Temperature instantaneous below VLT [C]: 4
+  Air Temperature instantanous at 2m [C]: 5
+  Air Temperature instantanous at 30m [C]: 6
+  Air Temperature instantanous at ground [C]: 7
+  Dew Temperature at 2m [C]: 8
+  Dew Temperature at 30m [C]: 9
+  Dew Temperature below VLT [C]: 10
+  Dew Temperature instantanous at 2m [C]: 11
+  Dew Temperature instantanous below VLT [C]: 12
+  Dew Temperature istantaneous at 30m [C]: 13
+  Humidity instantanous at 2m [%]: 14
+  Humidity instantanous at 30m [%]: 15
+  Humidity instantanous below VLT [%]: 16
+  Rain intensity below VLT [%]: 17
+  Rain intensity instantanous [%]: 18
+  Relative Humidity at 2m [%]: 19
+  Relative Humidity at 30m [%]: 20
+  Relative Humidity below VLT [%]: 21
+  Wind Direction at 10m (0/360) [deg]: 22
+  Wind Direction at 10m (180/-180) [deg]: 23
+  Wind Direction at 30m (0/360) [deg]: 24
+  Wind Direction at 30m (180/-180) [deg]: 25
+  Wind Direction instantanous at 10m [deg]: 26
+  Wind Direction instantanous at 30m [deg]: 27
+  Wind Speed U at 20m [m/s]: 28
+  Wind Speed U instantanous at 20m [m/s]: 29
+  Wind Speed V at 20m [m/s]: 30
+  Wind Speed V instantanous at 20m [m/s]: 31
+  Wind Speed W at 20m [m/s]: 32
+  Wind Speed W instantanous at 20m [m/s]: 33
+  Wind Speed at 10m [m/s]: 34
+  Wind Speed at 30m [m/s]: 35
+  Wind Speed instantanous at 10m [m/s]: 36
+  Wind Speed instantanous at 30m [m/s]: 37
