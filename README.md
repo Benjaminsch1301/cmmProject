@@ -1,14 +1,25 @@
 # Pipeline Data Develop for GNN 
 
-1. In order to download each dataset of La silla, Paranal and APEX meteorological data, run:
+1. In order to download each dataset of La silla, Paranal and APEX meteorological data for Analysis or get normal coefficents, run:
 
         python download.py lasilla --start_year 1993 --end_year 2024
         python download.py paranal --start_year 1998 --end_year 2024
         python download.py apex --start_year 2006 --end_year 2024
 
-2. See folder "notebooks" where you can find .ipynb with data analysis (missing data, count data, distributions, time series plot, etc.)
+2. See folder "notebooks" where you can find .ipynb with data analysis (missing data, count data, distributions, time series plot, etc.) according to each dataset.
 
-3. In order to get normal coeficients (mean and standard deviation) for all datasets (Paranal, La Silla and APEX), it is need to be downloaded in separate collections each dataset, if you have that, run:
+3. In order to download the dataset as a node of graph sample there are two ways, considering all the dataset or just a part as test, for that run, respectively:
+
+        python download_as_sample.py All
+        python download_as_sample.py Test
+
+    Also it is important to set the location where we locate each sample, for that go to [utils/yaml/config_download.yaml](utils/yaml/config_download.yaml), here you will see database and collection name in mongodb, start and end year of all three datasets.
+
+    The samples of this collection are useful later to build datareader, because each sample contains information about its value, location, feature and time, so this is almost ready to be a node in graph sample. The sample looks like this one:
+
+        {'idx': 0, 'time': '2007-01-01T00:00:02', 'node_features': 15.32, 'type_index': 0, 'spatial_index': 0}
+
+4. In order to get normal coeficients (mean and standard deviation) for all datasets (Paranal, La Silla and APEX), it is need to be downloaded in separate collections each dataset, if you have that, run:
 
         python get_normal_coef.py  all
 
@@ -17,9 +28,26 @@
         normal_coef_lasilla.yaml
         normal_coef_paranal.yaml
         normal_coef_apex.yaml
-        
-4. To download each sample (which later we process it to use it in datareader) run **utils/download_as_sample.py**, with its configuration **utils/yaml/config_download**, where you can select start and end year to download, its location in mongodb (database and collection), and other information useful to download. 
 
-5. Once all the samples are downloaded according to 4., we need to build each ContinuousTimeGraphSample according to all dataset, for that look up and just run **create_train_test_collection.py**, this code will create a train and test collection. Also in **datareader.py** you can find the datareader with ContinuousTimeGraphSample. All the parameters to build ContinuousTimeGraphSample are located in **config.yaml**, these are sparcity, stride and context lenght, and other corresponding to save in a mongodb database.
+    But the normal coefficients are already calculated according to all three dataset historically, so **it is not necessary to do this step**. The coefficients are located in:[utils/yaml/int_name_normal_coef.yaml](utils/yaml/int_name_normal_coef.yaml)
 
-6. An example of what **create_train_test_collection.py** do is located in [example.ipynb](example.ipynb) . Also there is an example of how indexes are generated located in [testing_indexes.ipynb](testing_indexes.ipynb)
+5. Once all the samples are downloaded according to 3., we need to build each ContinuousTimeGraphSample, but first it is need to be set all the parameters which are related to mongodb location and others to construct each graph sample. For that go to [config.yaml](config.yaml) and set:
+
+        host_port: Mongo db host and port
+        db_name: database name where it is located each sample downloaded in 3.
+        collection_pure_samples: collection name where it is located each sample downloaded in 3.
+        collection_test: collection name where the test graph samples will be located
+        collection_train: collection name where the train graph samples will be located
+        remove: the percentage to remove
+        stride: the number of steps the block is moved before it is considered the next input to the AGG 
+        context_len: length of input block
+
+Once all the parameters are set in [config.yaml](config.yaml), it is time to create the graph sample collection for train and test, for that run respectively:
+
+        python create_train_test_collection.py
+    or
+        python create_train_test_collection.py Test
+
+6. With the idea to sample from the train collection, there is a generic datareader located in [datareader.py](datareader.py). It is **important** to note that the length of the train and test collection is located in [config.yaml](config.yaml) in order to use it in datareader len method.
+
+7. Finally, An example of what **create_train_test_collection.py** do is located in [example.ipynb](example.ipynb) . Also there is an example of how indexes are generated located in [testing_indexes.ipynb](testing_indexes.ipynb).

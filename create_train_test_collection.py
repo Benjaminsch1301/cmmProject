@@ -6,6 +6,7 @@ import numpy as np
 from pymongo import MongoClient
 from datetime import datetime
 from tqdm import trange, tqdm
+import argparse
 # from AGG.extended_typing import ContinuousTimeGraphSample
 
 with open('utils/yaml/int_name_normal_coef.yaml','r') as f:
@@ -177,13 +178,15 @@ def create_train_test_db(samples:dict, config:dict, int_name_normal_coef:dict, t
     len_test = create_mongodb_graphsample(samples = {key: samples[key] for key in test_ids}, config = config, int_name_normal_coef = int_name_normal_coef, mode = 'test')
     return len_train, len_test
 
-def create_samples():
+def create_samples(type: str):
     with open('utils/yaml/int_name_normal_coef.yaml','r') as f:
         int_name_normal_coef = yaml.safe_load(f)
     with open('config.yaml','r') as f:
-        config = yaml.safe_load(f)   
-    ids:list = get_sorted_idx_list(config)
-    # ids = list(range(1000))
+        config = yaml.safe_load(f)  
+
+    if type == 'Test' :
+        ids = list(range(1000))
+    else: ids:list = get_sorted_idx_list(config)
 
     samples:dict = get_graph_sample_idx(context_len = config['context_len'], 
                                    stride = config['stride'], 
@@ -197,4 +200,10 @@ def create_samples():
         yaml.dump(config,file)
 
 if __name__ == '__main__':
-    create_samples()
+    parser = argparse.ArgumentParser(description='Testing or not graph sample collection')
+    parser.add_argument('type', choices=['','Test'])
+    args = parser.parse_args()
+    if args.type == 'Test':
+        create_samples(type = 'Test')
+    else:
+        create_samples(type = None)
