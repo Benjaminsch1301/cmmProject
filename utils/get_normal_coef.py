@@ -47,7 +47,6 @@ numeric_cols_paranal = [
     'Wind Speed instantanous at 30m [m/s]'
  ]
 
-
 numeric_cols_lasilla = [
     'Ambient Temperature at 30m [C]', 
     'Ambient Temperature at 2m [C]', 
@@ -72,23 +71,33 @@ def get_normal_coef(numeric_cols,db_name):
     client = MongoClient("mongodb://localhost:27017/")
     db = client[db_name] 
     collection = db[db_name]
+    with open('yaml/map_features_int.yaml','r') as f:
+        map_features_int = yaml.safe_load(f)
 
     mean_list = []
     std_list = []
+    if db_name == 'meteo_paranal':
+        location = 0
+    elif db_name == 'meteo_lasilla':
+        location = 1
+    elif db_name == 'meteo_apex':
+        location = 2
+
     for feature in numeric_cols:
+
         df = pd.DataFrame(list(collection.find({}, {feature: 1, "_id": 0})))
 
         std = float(df.iloc[:,0].std())
         mean = float(df.iloc[:,0].mean())
         
-        std_list.append((feature,std))
-        mean_list.append((feature,mean))
+        int_feature = map_features_int[location][feature]
+
+        std_list.append((int_feature,std))
+        mean_list.append((int_feature,mean))
 
     client.close()
         
     return dict([('mean',dict(mean_list)),('std',dict(std_list))])
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download data from La Silla, Paranal or APEX.')
@@ -122,6 +131,7 @@ if __name__ == "__main__":
         # all_norm_coef = {'paranal':dictionary_coef_paranal, 
         #                  'lasilla': dictionary_coef_lasilla, 
         #                  'apex': dictionary_coef_apex}
+
         all_norm_coef = {0:dictionary_coef_paranal, 
                          1: dictionary_coef_lasilla, 
                          2: dictionary_coef_apex}
@@ -129,5 +139,3 @@ if __name__ == "__main__":
         with open("normal_coef_all.yaml","w") as file:
             yaml.dump(all_norm_coef,file)
         print('Normal coeficients for APEX saved!')
-
-

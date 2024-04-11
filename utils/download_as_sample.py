@@ -5,6 +5,20 @@ from io import StringIO
 from pymongo import MongoClient
 from datetime import datetime
 from payloads import payload_paranal, payload_lasilla, payload_apex
+import argparse
+
+api_info = {'paranal':
+{  'api_url': "http://archive.eso.org/wdb/wdb/asm/meteo_paranal/query",
+  'payload': None,
+  'location_idx': 0},
+'lasilla':
+{  'api_url': "http://archive.eso.org/wdb/wdb/asm/meteo_lasilla/query",
+  'payload': None,
+  'location_idx': 1},
+'apex':
+{  'api_url': "http://archive.eso.org/wdb/wdb/asm/meteo_apex/query",
+  'payload': None,
+  'location_idx': 2}}
 
 def request(api_url,payload):
     # request to endpoint
@@ -56,17 +70,17 @@ def request_to_sample(first_line,map_features_int_location ,location_idx, idx =0
 
     return idx, all_samples
 
-def request_and_load_to_mongodb(config:dict, map_features_int:dict, idx : int = 0):
+def request_and_load_to_mongodb(config:dict, api_info:dict, map_features_int:dict, idx : int = 0):
     
-    client = MongoClient("mongodb://localhost:27017/")
+    client = MongoClient(config['host_port'])
     db = client[config['db_name']]
     collection = db[config['collection_name']]
 
-    for location in config.keys():
+    for location in api_info:
         print('-----',location,'-----')
-        api_url = config[location]['api_url']
-        payload = config[location]['payload']
-        location_idx = config[location]['location_idx']
+        api_url = api_info[location]['api_url']
+        payload = api_info[location]['payload']
+        location_idx = api_info[location]['location_idx']
 
         map_features_int_location = map_features_int[location]
 
@@ -114,11 +128,11 @@ def test():
         payload_apex['start_date'] = period_request
         payload_lasilla['start_date'] = period_request
 
-        config['apex']['payload'] = payload_apex
-        config['lasilla']['payload'] = payload_lasilla
-        config['paranal']['payload'] = payload_paranal
+        api_info['apex']['payload'] = payload_apex
+        api_info['lasilla']['payload'] = payload_lasilla
+        api_info['paranal']['payload'] = payload_paranal
 
-        idx = request_and_load_to_mongodb(config= config, map_features_int = map_features_int, idx =idx)
+        idx = request_and_load_to_mongodb(config= config, api_info=api_info,map_features_int = map_features_int, idx =idx)
         print('last index sample: ', idx)
 
 def download_all():
@@ -142,13 +156,18 @@ def download_all():
         payload_apex['start_date'] = period_request
         payload_lasilla['start_date'] = period_request
 
-        config['apex']['payload'] = payload_apex
-        config['lasilla']['payload'] = payload_lasilla
-        config['paranal']['payload'] = payload_paranal
+        api_info['apex']['payload'] = payload_apex
+        api_info['lasilla']['payload'] = payload_lasilla
+        api_info['paranal']['payload'] = payload_paranal
 
-        idx = request_and_load_to_mongodb(config = config,map_features_int = map_features_int, idx =idx)
+        idx = request_and_load_to_mongodb(config = config, api_info=api_info, map_features_int = map_features_int, idx =idx)
         print('last index sample: ', idx)
 
 if __name__ == '__main__':
-    test()
-    # download_all()
+    parser = argparse.ArgumentParser(description='Download data from La Silla, Paranal or APEX in one Collection.')
+    parser.add_argument('download', choices=['All','Test'])
+    args = parser.parse_args()
+    if args.download == 'Test':
+        test()
+    if args.download == 'All':
+        download_all()
