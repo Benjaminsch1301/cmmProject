@@ -45,7 +45,9 @@
 Once all the parameters are set in [config.yaml](config.yaml), it is time to create the graph sample collection for train and test, for that run respectively:
 
         python create_train_test_collection.py
-or
+        
+or 
+
         python create_train_test_collection.py Test
 
 6. With the idea to sample from the train collection, there is a generic datareader located in [datareader.py](datareader.py). It is **important** to note that the length of the train and test collection is located in [config.yaml](config.yaml) in order to use it in datareader len method.
