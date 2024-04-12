@@ -29,27 +29,30 @@
         normal_coef_paranal.yaml
         normal_coef_apex.yaml
 
-    But the normal coefficients are already calculated according to all three dataset historically, so **it is not necessary to do this step**. The coefficients are located in:[utils/yaml/int_name_normal_coef.yaml](utils/yaml/int_name_normal_coef.yaml)
+    But the normal coefficients are already calculated according to all three dataset historically, so **it is not necessary to do this step**. The coefficients are located in: [utils/yaml/int_name_normal_coef.yaml](utils/yaml/int_name_normal_coef.yaml)
 
 5. Once all the samples are downloaded according to 3., we need to build each ContinuousTimeGraphSample, but first it is need to be set all the parameters which are related to mongodb location and others to construct each graph sample. For that go to [config.yaml](config.yaml) and set:
 
-        - host_port: Mongo db host and port
-        - db_name: database name where it is located each sample downloaded in 3.
-        - collection_pure_samples: collection name where it is located each sample downloaded in 3.
-        - collection_test: collection name where the test graph samples will be located
-        - collection_train: collection name where the train graph samples will be located
-        - remove: the percentage to remove
-        - stride: the number of steps the block is moved before it is considered the next input to the AGG 
-        - context_len: length of input block
+ - host_port: Mongo db host and port
+ - db_name: database name where it is located each sample downloaded in 3.
+ - collection_pure_samples: collection name where it is located each sample downloaded in 3.
+ - collection_test: collection name where the test graph samples will be located
+ - collection_train: collection name where the train graph samples will be located
+ - remove: the percentage to remove
+ - stride: the number of steps the block is moved before it is considered the next input to the AGG 
+ - context_len: length of input block
+ - N_block_insert: number of blocks of train samples to be inserted in collection (useful to save memory)
 
-Once all the parameters are set in [config.yaml](config.yaml), it is time to create the graph sample collection for train and test, for that run respectively:
+    Once all the parameters are set in [config.yaml](config.yaml), it is time to create the graph sample collection for train and test, for that run respectively:
 
         python create_train_test_collection.py
-        
-or 
+
+    or 
 
         python create_train_test_collection.py Test
 
-6. With the idea to sample from the train collection, there is a generic datareader located in [datareader.py](datareader.py). It is **important** to note that the length of the train and test collection is located in [config.yaml](config.yaml) in order to use it in datareader len method.
+    Additionally there is a code to insert samples by blocks in collections (train and test): [create_train_test_collection_block.py](create_train_test_collection_block.py). 
+
+6. With the idea to sample from the train collection, there is a generic datareader located in [datareader.py](datareader.py). It is **important** to note that the length of the train and test collection is located in [config.yaml](config.yaml) in order to use it in datareader len method. Those "private" parameters are **len_test** and **len_test**, which it is recommended not be change them. 
 
 7. Finally, An example of what **create_train_test_collection.py** do is located in [example.ipynb](example.ipynb) . Also there is an example of how indexes are generated located in [testing_indexes.ipynb](testing_indexes.ipynb).

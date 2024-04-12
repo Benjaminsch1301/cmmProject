@@ -76,7 +76,7 @@ def train_test_split(samples:dict, test_size:float):
     train_ids = [k for k in total_samples_list if k not in test_ids]
     return train_ids, list(test_ids) # lists of indexes according to train and test
 
-def create_mongodb_graphsample(samples:dict, config:dict, int_name_normal_coef:dict, mode = 'train'):
+def create_mongodb_graphsample(samples:dict, config:dict, int_name_normal_coef:dict, mode = 'train', len_samples=0):
     """
     This Function can create two collections in mongodb one with train samples and other with test samples, and returns the total samples located in that collection. 
     Those samples will be use in ContinuousTimeGraphSample class.
@@ -89,8 +89,8 @@ def create_mongodb_graphsample(samples:dict, config:dict, int_name_normal_coef:d
     db = client[db_name] 
     pure_collection = db[config['collection_pure_samples']]
     graph_samples = []
-    print(f'Starting to build graph samples...({mode})')
-    for j, id in enumerate(tqdm(samples)):
+
+    for j, id in enumerate(samples, start = len_samples):
         
         id_list_context = samples[id][0]
         id_list_target = samples[id][1]
@@ -147,23 +147,26 @@ def create_mongodb_graphsample(samples:dict, config:dict, int_name_normal_coef:d
     ## creating a collection with graphs samples 
     if mode == 'test':
         collection_graph_samples = db[config['collection_test']]
-        name_collection = config['collection_train']
-
-        print('Inserting samples in test collection...')
+        # name_collection = config['collection_train']
     else: 
         collection_graph_samples = db[config['collection_train']]
-        name_collection = config['collection_train']
-        print('Inserting samples in train collection...')
+        # name_collection = config['collection_train']
 
-    if collection_graph_samples.count_documents({})>0: # if there is something in collection, drop it
+    if collection_graph_samples.count_documents({}) > 0 and len_samples == 0: # if there is something in collection, drop it
         collection_graph_samples.drop()
 
     collection_graph_samples.insert_many(graph_samples)
-    print(j+1,f' Samples inserted in collection "{name_collection}" of database "{db_name}"')
 
     client.close()
 
     return j
+
+def partition(samples:dict, partition_size:int):
+
+    partition_size = len(samples) // (partition_size)
+    partitions = [list(samples.keys())[i:i + partition_size] for i in range(0, len(samples), partition_size)]
+    return [{key: samples[key] for key in partition} for partition in partitions]
+
 
 def create_train_test_db(samples:dict, config:dict, int_name_normal_coef:dict, test_size:float):
     """
@@ -174,8 +177,37 @@ def create_train_test_db(samples:dict, config:dict, int_name_normal_coef:dict, t
     """
     train_ids, test_ids = train_test_split(samples = samples, test_size = test_size)
     print(f'{len(train_ids)} samples expeted to be inserted in train collection, and {len(test_ids)} in test collection.')
-    len_train = create_mongodb_graphsample(samples = {key: samples[key] for key in train_ids}, config = config, int_name_normal_coef = int_name_normal_coef, mode = 'train')
-    len_test = create_mongodb_graphsample(samples = {key: samples[key] for key in test_ids}, config = config, int_name_normal_coef = int_name_normal_coef, mode = 'test')
+
+    train_samples = {key: samples[key] for key in train_ids}
+    test_samples = {key: samples[key] for key in test_ids}
+
+    train_samples = partition(train_samples,config['N_block_insert'])
+    test_samples = partition(test_samples,config['N_block_insert'])
+    
+    print(f"Starting to build graph samples with {len(train_samples)} blocks...(train)")
+    len_train = 0
+    for partition_train_samples in tqdm(train_samples):
+        len_train = create_mongodb_graphsample(samples = partition_train_samples, 
+                                               config = config, 
+                                               int_name_normal_coef = int_name_normal_coef, 
+                                               mode = 'train',
+                                               len_samples = len_train
+                                               )
+        len_train+=1
+    print(f"{len_train} samples inserted in train collection")
+
+    print(f"Starting to build graph samples with {len(test_samples)} blocks...(test)")
+    len_test = 0
+    for partition_test_samples in tqdm(test_samples):
+        len_test = create_mongodb_graphsample(samples = partition_test_samples,
+                                               config = config, 
+                                               int_name_normal_coef = int_name_normal_coef, 
+                                               mode = 'test',
+                                               len_samples = len_test
+                                               )
+        len_test+=1
+    print(f"{len_test} samples inserted in test collection")
+
     return len_train, len_test
 
 def create_samples(type: str):
@@ -194,8 +226,8 @@ def create_samples(type: str):
                                    selection_size = config['remove']
                                    )
     len_train, len_test = create_train_test_db(samples, config, int_name_normal_coef, test_size = 0.3)
-    config['len_train'] = len_train+1 # total samples, not last id
-    config['len_test'] = len_test+1
+    config['len_train'] = len_train # total samples, not last id
+    config['len_test'] = len_test
     with open("config.yaml","w") as file:
         yaml.dump(config,file)
 
