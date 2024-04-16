@@ -184,7 +184,7 @@ def create_train_test_db(samples:dict, config:dict, int_name_normal_coef:dict, t
     train_samples = partition(train_samples,config['N_block_insert'])
     test_samples = partition(test_samples,config['N_block_insert'])
     
-    print(f"Starting to build graph samples with {len(train_samples)} blocks...(train)")
+    print(f"Starting to build graph samples with {len(train_samples)} blocks to be inserted in collection...(train)")
     len_train = 0
     for partition_train_samples in tqdm(train_samples):
         len_train = create_mongodb_graphsample(samples = partition_train_samples, 
@@ -196,7 +196,7 @@ def create_train_test_db(samples:dict, config:dict, int_name_normal_coef:dict, t
         len_train+=1
     print(f"{len_train} samples inserted in train collection")
 
-    print(f"Starting to build graph samples with {len(test_samples)} blocks...(test)")
+    print(f"Starting to build graph samples with {len(test_samples)} blocks to be inserted in collection...(test)")
     len_test = 0
     for partition_test_samples in tqdm(test_samples):
         len_test = create_mongodb_graphsample(samples = partition_test_samples,
@@ -226,10 +226,6 @@ def create_samples(type: str):
                                    selection_size = config['remove']
                                    )
     len_train, len_test = create_train_test_db(samples, config, int_name_normal_coef, test_size = 0.3)
-    config['len_train'] = len_train # total samples, not last id
-    config['len_test'] = len_test
-    with open("config.yaml","w") as file:
-        yaml.dump(config,file)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Testing or not graph sample collection')

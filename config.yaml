@@ -5,8 +5,6 @@ collection_train: train
 context_len: 10
 db_name: Meteo_test
 host_port: mongodb://localhost:27017/
-len_test: 164
-len_train: 384
 remove: 0.3
 stride: 5
 time_norm: 259200

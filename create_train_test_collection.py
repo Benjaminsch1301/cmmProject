@@ -194,10 +194,6 @@ def create_samples(type: str):
                                    selection_size = config['remove']
                                    )
     len_train, len_test = create_train_test_db(samples, config, int_name_normal_coef, test_size = 0.3)
-    config['len_train'] = len_train+1 # total samples, not last id
-    config['len_test'] = len_test+1
-    with open("config.yaml","w") as file:
-        yaml.dump(config,file)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Testing or not graph sample collection')

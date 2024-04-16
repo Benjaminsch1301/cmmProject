@@ -1,21 +1,25 @@
 import yaml
-import random
-import numpy as np
+# import random
+# import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 from pymongo import MongoClient
-from datetime import datetime
-from tqdm import trange, tqdm
+# from datetime import datetime
+# from tqdm import trange, tqdm
 from AGG.extended_typing import ContinuousTimeGraphSample
 
 class ObsMeteoDataset(Dataset):
     def __init__(self, config ):
         self.lazy_loaded = False
         self.config = config
-        self.len = config['len_train']
+
+        client_ = MongoClient(self.config['host_port'])
+        collection_ = client_[self.config['db_name']][self.config['collection_train']]
+        self.len = collection_.count_documents({})
+        client_.close()
 
     def lazy_load_db(self):
-        self.client = MongoClient(self.config['host'])
+        self.client = MongoClient(self.config['host_port'])
         self.collection = self.client[self.config['db_name']][self.config['collection_train']]
         self.lazy_loaded = True
 

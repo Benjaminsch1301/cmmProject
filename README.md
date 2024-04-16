@@ -51,8 +51,14 @@
 
         python create_train_test_collection.py Test
 
-    Additionally there is a code to insert samples by blocks in collections (train and test): [create_train_test_collection_block.py](create_train_test_collection_block.py). 
+    Additionally there is a code to insert samples by blocks in collections (train and test): [create_train_test_collection_block.py](create_train_test_collection_block.py), which can be run using:
 
-6. With the idea to sample from the train collection, there is a generic datareader located in [datareader.py](datareader.py). It is **important** to note that the length of the train and test collection is located in [config.yaml](config.yaml) in order to use it in datareader len method. Those "private" parameters are **len_test** and **len_test**, which it is recommended not be change them. 
+        python create_train_test_collection_block.py
+
+    or 
+
+        python create_train_test_collection_block.py Test
+
+6. With the idea to sample from the train collection, there is a generic datareader located in [datareader.py](datareader.py). 
 
 7. Finally, An example of what **create_train_test_collection.py** do is located in [example.ipynb](example.ipynb) . Also there is an example of how indexes are generated located in [testing_indexes.ipynb](testing_indexes.ipynb).
